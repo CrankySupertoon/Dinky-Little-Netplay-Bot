@@ -10,9 +10,9 @@ import config
 # regex for the add-game and add-user commands
 EQUAL_REGEX = re.compile(r"""(\w+)\s*=\s*["'](.+?)["']""")
 
-botToken, channels, users, roles, pf = config.load_config()
-master                                   = config.load_json()
-
+botToken, channels, wl_users, wl_roles, pf = config.load_config()
+master                                     = config.load_json()
+ 
 consoles = master["consoles"]
 users    = master["users"]
 
@@ -223,7 +223,7 @@ async def info(message, command):
 	console = ""
 
 	if spaces == None:
-		await client.send_message(message.command, "Your argument(s) are invalid!  Use **{}help**".format(pf))
+		await client.send_message(message.channel, "Your argument(s) are invalid!  Use **{}help**".format(pf))
 		return
 
 	name = msg[len(command) - 1 + spaces : ]
@@ -302,10 +302,36 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+	is_authorized = False
 	print("{user}: {msg}".format(user = message.author.name, msg = message.content))
+
+	# as a precaution
+	if message.author.id == client.user.id:
+		return
+
+	# user authorization
+	if (message.author.id in wl_users):
+		is_authorized = True
+
+	# role authorization
+	for role in message.author.roles:
+		print(role.id)
+		print(wl_roles)
+
+		if role.id in wl_roles:
+			is_authorized = True
+
+	print(is_authorized)
 
 	for key, function in command_list.items():
 		if key in message.content:
+			
+			# make sure an unauthorized user is not trying to add any entries
+			# I'll add a better implementation of this in the future
+			if not is_authorized and key in [pf + "add-console", pf + "remove-console", pf + "add-game", pf + "remove-game", pf + "remove-user"]:
+				await client.send_message(message.channel, "You do not have permission to use that command.")
+				break
+
 			await function(message, key)
 
 client.run(botToken)
