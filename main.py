@@ -61,6 +61,8 @@ async def add_console(message, command):
 	await client.send_message(message.channel, "The **{}** section was created successfully.".format(console_name))
 	print(consoles)
 
+	config.save_json(master)
+
 	return 
 
 async def remove_console(message, command):
@@ -81,6 +83,8 @@ async def remove_console(message, command):
 	
 	await client.send_message(message.channel, "Deleted.")
 	print(consoles)
+
+	config.save_json(master)
 
 	return
 
@@ -106,6 +110,8 @@ async def add_game(message, command):
 
 		await client.send_message(message.channel, "Added **{name}** to the **{console}** section.".format(name = variables["name"], console = variables["console"]))
 		print(consoles)
+
+		config.save_json(master)
 	except KeyError:
 		await client.send_message(message.channel, "Some parameters were not filled!  Use **{}help**".format(pf))
 	return
@@ -135,6 +141,7 @@ async def remove_game(message, command):
 		await client.send_message(message.channel, "That game doesn't exist!")
 
 	print(consoles)
+	config.save_json(master)
 	
 	return
 
@@ -169,6 +176,8 @@ async def add_user(message, command):
 	await client.send_message(message.channel, "User added successfully.")
 	print(users)
 
+	config.save_json(master)
+
 	return
 
 async def remove_user(message, command):
@@ -189,6 +198,8 @@ async def remove_user(message, command):
 
 	await client.send_message(message.channel, "Deleted.")
 	print(users)
+
+	config.save_json(master)
 
 	return
 

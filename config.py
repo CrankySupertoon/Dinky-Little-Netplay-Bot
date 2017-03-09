@@ -41,3 +41,11 @@ def load_json():
 		data.close()
 
 	return master
+
+def save_json(master):
+	with open("data.json", "w") as data:
+		json.dump(master, data)
+		data.close()
+
+	print("data.json was updated.")
+	return
