@@ -305,8 +305,12 @@ async def on_message(message):
 	is_authorized = False
 	print("{user}: {msg}".format(user = message.author.name, msg = message.content))
 
-	# as a precaution
+	# as a precaution against possible bot abuse
 	if message.author.id == client.user.id:
+		return
+
+	# to prevent some bugs with command parsing
+	if message.content[0] != pf:
 		return
 
 	# user authorization
