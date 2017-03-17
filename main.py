@@ -18,7 +18,7 @@ users    = master["users"]
 
 client = discord.Client()
 
-async def get_spaces(msgc, command):
+def get_spaces(msgc, command):
 	command_length = len(command) - 1
 	i = 1
 
@@ -31,7 +31,7 @@ async def get_spaces(msgc, command):
 	return None
 
 # returns a dictionary containing keys for various variables
-async def return_variables(msgc):
+def return_variables(msgc):
 	match_list = EQUAL_REGEX.findall(msgc)
 	variable_list = ["name", "console", "link", "ip"]
 
@@ -67,7 +67,7 @@ async def add_console(message, command):
 
 async def remove_console(message, command):
 	msg = message.content
-	spaces = await get_spaces(msg, command)
+	spaces = get_spaces(msg, command)
 
 	if spaces == None:
 		await client.send_message(message.channel, "Your argument(s) are invalid!  Use **{}help**".format(pf))
@@ -90,7 +90,7 @@ async def remove_console(message, command):
 
 async def add_game(message, command):
 	msg = message.content
-	variables = await return_variables(msg)
+	variables = return_variables(msg)
 
 	# TODO: this is kinda messy.  Refactor if possible.
 	try:
@@ -118,7 +118,7 @@ async def add_game(message, command):
 
 async def remove_game(message, command):
 	msg = message.content
-	spaces = await get_spaces(msg, command)
+	spaces = get_spaces(msg, command)
 
 	game_exist = False
 
@@ -161,7 +161,7 @@ async def list_games(message, command):
 
 async def add_user(message, command):
 	msg = message.content
-	variables = await return_variables(msg)
+	variables = return_variables(msg)
 
 	if ("name" not in variables) or ("ip" not in variables):
 		await client.send_message(message.channel, "Some parameters were not filled!  Use **{}help**".format(pf))
@@ -182,7 +182,7 @@ async def add_user(message, command):
 
 async def remove_user(message, command):
 	msg = message.content
-	spaces = await get_spaces(msg, command)
+	spaces = get_spaces(msg, command)
 
 	if spaces == None:
 		await client.send_message(message.channel, "Your argument(s) are invalid!  Use **{}help**".format(pf))
@@ -214,7 +214,7 @@ async def list_users(message, command):
 
 async def info(message, command):
 	msg = message.content
-	spaces = await get_spaces(msg, command)
+	spaces = get_spaces(msg, command)
 
 	is_game    = False
 	is_user    = False
